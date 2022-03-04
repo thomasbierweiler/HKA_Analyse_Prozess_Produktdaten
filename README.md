@@ -1,2 +1,2 @@
-# HKA_Analyse_Prozess_Produktdaten
+# HKA Analyse von Prozess- und Produktdaten
 Hochschule Karlsruhe Vorlesung Analyse von Prozess und Produktdaten

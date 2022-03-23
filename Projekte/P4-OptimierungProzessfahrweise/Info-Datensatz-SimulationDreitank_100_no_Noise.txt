@@ -1,0 +1,8 @@
+Datensatz SimulationDreitank_100_noNoise
+
+Es gilt:
+u1, u2: Zulauf in Tank 1 und 3, Entscheidungsvariablen
+q1: Rohrquerschnitt zwischen Tank 1 und 2 (~Ventilstellung), Störgröße
+level1, level2, level3: Füllstände in den drei Tanks.
+
+Ein Gütekriterium könnte beispielsweise J= (level2-0.5)^2 sein.

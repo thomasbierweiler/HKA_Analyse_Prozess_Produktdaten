@@ -1,0 +1,2 @@
+# tested with python 3.8.10
+ydata-synthetic==0.3.0

@@ -1,3 +1,4 @@
+# python 3.9.2
 # ROCKET: Dempster A, Petitjean F, Webb GI (2019) ROCKET: Exceptionally fast and accurate time series classification using random convolutional kernels. arXiv:1910.13051
 #   https://arxiv.org/abs/1910.13051
 # Demo of ROCKET transform: https://github.com/alan-turing-institute/sktime/blob/main/examples/rocket.ipynb
@@ -28,7 +29,7 @@ for f in features:
 # convert ms since epoch in datetime
 df['time']=pd.to_datetime(df['UnixEpochMilliseconds'],unit='ms')
 
-# read log file
+# read log file (label)
 dfl=pd.read_csv('../data/PL23_log.csv')
 dfl['start']=pd.to_datetime(dfl['Start'])
 dfl['end']=pd.to_datetime(dfl['Ende'])

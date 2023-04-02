@@ -16,6 +16,11 @@
 #
 # # Adapted by Thomas Bierweiler for Hochschule Karlsruhe, Data Science, DSCB450, Analyse von Prozess- und Produktdaten
 
+# initial size of population
+npop=10000
+# number of generations
+ngen=1000
+
 import operator
 import math
 import random
@@ -23,12 +28,16 @@ import copy
 
 import numpy
 
+import sympy
+from sympy.abc import x
+
 from deap import algorithms
 from deap import base
 from deap import creator
 from deap import tools
 from deap import gp
 
+# sequence for which we try and find the next member
 seq=(237,474,711,948,234,471,708,945,231,468,705,942,228,465,702,939,225)
 
 def convert_inverse_prim(prim, args):
@@ -55,6 +64,7 @@ def convert_inverse_prim(prim, args):
         'mul': "Mul({},{})".format,
         'add': "Add({},{})".format,
         'pow': "Pow({},{})".format,
+        'protectedModulus': "Mod({},{})".format,
     }
     prim_formatter = converter.get(prim.name, prim.format)
 
@@ -141,7 +151,7 @@ toolbox.decorate("mutate", gp.staticLimit(key=operator.attrgetter("height"), max
 def main():
     random.seed(318)
 
-    pop = toolbox.population(n=10000)
+    pop = toolbox.population(n=npop)
     hof = tools.HallOfFame(1)
 
     stats_fit = tools.Statistics(lambda ind: ind.fitness.values)
@@ -152,7 +162,7 @@ def main():
     mstats.register("min", numpy.min)
     mstats.register("max", numpy.max)
 
-    pop, log = algorithms.eaSimple(pop, toolbox,cxpb=0.5,mutpb=0.1,ngen=1000, stats=mstats,
+    pop, log = algorithms.eaSimple(pop, toolbox,cxpb=0.5,mutpb=0.1,ngen=ngen, stats=mstats,
                                    halloffame=hof, verbose=True)
     # print log
     return pop, log, hof
@@ -166,9 +176,16 @@ if __name__ == "__main__":
     # calculate RMSE
     sqerrors=0.0
     func = toolbox.compile(expr=hof.items[0])
+    sol_seq=[]
     for x in points:
+        sol_seq.append(func(x))
         sqerrors+=(func(x)-seq[x-1])**2
-    # sqerrors = ((func(x) - x**4 - x**3 - x**2 - x)**2 for x in points)
-    rmse=sqerrors / len(points)
-    errstr='RMSE: ' + str(math.sqrt(rmse))
-    print(errstr)
+    rmse=math.sqrt(sqerrors / len(points))
+    print('RMSE: {}'.format(rmse))
+    # print values of given sequence
+    print('Given sequence: {}'.format(seq))
+    # print values of "solution"
+    print('Proposed sequence: {}'.format(sol_seq))
+    # simplyfy term with symbolic toolbox
+    sympy_term=sympy.simplify(sympy_string)
+    print("Simplified method: {}".format(sympy_term))
